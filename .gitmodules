@@ -1,0 +1,3 @@
+[submodule "src/third_part/pyMoeFou"]
+	path = src/third_part/pyMoeFou
+	url = https://github.com/LittleKey/pyMoeFou.git
