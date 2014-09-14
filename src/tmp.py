@@ -13,7 +13,7 @@ def GetSongUrlByName(name):
             m = mf.GetMusicByID(s.parent_wiki)
             print("{} - {}: {}".format(s.title.encode("utf8"), m.title.encode("utf8"), up.url))
 
-GetSongUrlByName("my life")
+#GetSongUrlByName("my life")
 # OUT: 1-11 Words that changed my life - TVアニメ『Free!』オリジナルサウンドトラック Ever Blue Sounds: http://nyan.90g.org/6/9/a8/f24474b2d557adc459d405eb82691c4f.mp3
 # OUT: Someday of my life - ラブライブ!  μ&#039;s Best Album Best Live! collection 【Blu-ray Disc付 超豪華盤】: http://nyan.90g.org/2/7/43/0811ed7dd408fe77c6f1f2ca92c3143f.mp3
 # OUT: 陽ノ下葵(CV.海保絵果) - Happy my life ～Thank you for everything!!～ (Aoi in KARAOKE room Autumn Accoustic Ver.) - D.C.III~ダ・カーポIII~ドラマCDコレクション vol.3 feat.陽ノ下葵: http://nyan.90g.org/4/e/1d/22f6126f3b1fc194b24d1583c76d74be.mp3
@@ -37,3 +37,4 @@ GetSongUrlByName("my life")
 # OUT: my life - 噬神者 OST: http://nyan.90g.org/4/e/09/bf5da9c9debeaab064d904b0d589c29b.mp3
 # OUT: my life -シオのうた- - 噬神者 OST: http://nyan.90g.org/2/1/69/494b9225ca021c1ae356589a78e23073.mp3
 
+GetSongUrlByName("粉雪につつまれて")
