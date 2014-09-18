@@ -61,7 +61,8 @@ if __name__ == '__main__':
         else:
             exit(-1)
 
-        print(rlt)
+        with open("OUT.txt", "wb") as fp:
+            fp.write(rlt)
     except Exception as e:
         print(e.message)
 
