@@ -1,37 +1,35 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import json
-import dicttoxml
+#import json
+#import dicttoxml
 from third_part import pyMoeFou
 import argparse
-import sys
+import requests
+import os
+#import sys
 
 MF = pyMoeFou.MoeFou()
 
-def JsonToXml(J):
-    d = json.loads(J)
-
-    return dicttoxml.dicttoxml(d)
+#def JsonToXml(J):
+#    d = json.loads(J)
+#
+#    return dicttoxml.dicttoxml(d)
 
 def GetMusics(name):
-    musicDict = {}
-    num = 1
+    musicList = []
     for music in MF.GetMusicByName(name):
-        musicDict[str(num)] = [music.id, music.title]
-        num += 1
+        musicList.append((music.id, music.title.encode('utf-8')))
 
-    return musicDict
+    return musicList
 
 def GetSongs(musicID):
-    songDict = {}
+    songList = []
     music = MF.GetMusicByID(musicID)
-    num = 1
     for song in MF.GetSongByMusic(music):
-        songDict[str(num)] = [song.id, song.title]
-        num += 1
+        songList.append((song.id, song.title.encode('utf-8')))
 
-    return songDict
+    return songList
 
 def GetUrl(songID):
     song = MF.GetSongByID(songID)
@@ -47,22 +45,44 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--music', default='', help='music name for get musics.')
     parser.add_argument('-s', '--song', default='', help='music id for get songs.')
     parser.add_argument('-u', '--url', default='', help='song id for get song\'s url.')
+    parser.add_argument('-l', '--loop', default='1', help='the loop times if play')
 
     args = parser.parse_args()
 
-    try:
-        rlt = ''
-        if args.music:
-            rlt = dicttoxml.dicttoxml(GetMusics(args.music))
-        elif args.song:
-            rlt = dicttoxml.dicttoxml(GetSongs(int(args.song)))
-        elif args.url:
-            rlt = GetUrl(int(args.url))
-        else:
-            exit(-1)
+    content_length = -1
+    if args.music:
+        rlt = GetMusics(args.music)
+    elif args.song:
+        rlt = GetSongs(int(args.song))
+    elif args.url:
+        rlt = GetUrl(int(args.url))
+        headers = requests.head(rlt.strip()).headers
+        content_length = int(headers.get('content-length', -1))
+    else:
+        exit(-1)
+    if content_length > 0:
+        os.system("mplayer -loop {times} -cache {cache_length} {url}".format(
+            times=int(args.loop),
+            cache_length=content_length / 10,
+            url=rlt)
+        )
+    else:
+        for item in rlt:
+            print("~~{iden}~~\t{title}".format(iden=item[0], title=item[1]))
 
-        with open("OUT.txt", "wb") as fp:
-            fp.write(rlt)
-    except Exception as e:
-        print(e.message)
+    #try:
+    #    rlt = ''
+    #    if args.music:
+    #        rlt = dicttoxml.dicttoxml(GetMusics(args.music))
+    #    elif args.song:
+    #        rlt = dicttoxml.dicttoxml(GetSongs(int(args.song)))
+    #    elif args.url:
+    #        rlt = GetUrl(int(args.url))
+    #    else:
+    #        exit(-1)
+
+    #    with open("OUT.txt", "wb") as fp:
+    #        fp.write(rlt)
+    #except Exception as e:
+    #    print(e.message)
 
